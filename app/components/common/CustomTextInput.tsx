@@ -7,20 +7,31 @@ import {
   StyleProp,
   ViewStyle,
   View,
+  TextStyle,
 } from 'react-native';
 import {style as fontStyles} from '../../themes/fonts';
 import colors from '../../themes/colors';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Controller, ControllerProps} from 'react-hook-form';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface ICustomTextInputProps extends TextInputProps {
-  label: string;
+  label?: string;
   containerStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  inputRef?: React.Ref<any>;
 }
+// cái này chịu
+//https://stackoverflow.com/questions/43159887/make-a-single-property-optional-in-typescript
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+type IControllerProps = PartialBy<ControllerProps, 'render'>;
+
 const INPUT_HEIGHT = 50;
 
 export const CustomTextInput: React.FC<
-  ICustomTextInputProps & ControllerProps
+  ICustomTextInputProps & IControllerProps
 > = ({
   label,
   control,
@@ -28,7 +39,9 @@ export const CustomTextInput: React.FC<
   keyboardType,
   placeholder,
   containerStyle,
+  inputStyle,
   secureTextEntry,
+  inputRef,
   ...props
 }) => {
   const [eyeVisible, setEyeVisible] = React.useState(secureTextEntry);
@@ -42,50 +55,74 @@ export const CustomTextInput: React.FC<
           rules={rules}
           render={({field: {onChange, value}, fieldState: {error}}) => (
             <>
+              {/* <LinearGradient
+                style={styles.linearGradient}
+                colors={[colors.white, colors.gray]}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}> */}
               <TextInput
                 placeholder={placeholder || label || ''}
                 keyboardType={keyboardType}
                 style={[
                   styles.input,
-                  {borderColor: error ? 'red' : colors.black},
+                  {
+                    borderColor: error ? 'red' : colors.gray2,
+                  },
+                  inputStyle,
                 ]}
                 secureTextEntry={eyeVisible}
                 value={value}
                 onChangeText={onChange}
+                maxLength={props.maxLength}
+                autoFocus={props.autoFocus}
+                ref={inputRef}
               />
+              {/* </LinearGradient> */}
               {error && (
                 <Text style={{color: 'red', alignSelf: 'stretch'}}>
                   {error.message || 'error'}
                 </Text>
               )}
+              {secureTextEntry && (
+                <FeatherIcon
+                  name={eyeVisible ? 'eye-off' : 'eye'}
+                  color={colors.black}
+                  size={INPUT_HEIGHT / 2}
+                  style={styles.icon}
+                  onPress={() => setEyeVisible(prevState => !prevState)}
+                />
+              )}
+              {/* {!error && value && !secureTextEntry && (
+                <FeatherIcon
+                  name={'check'}
+                  color={colors.primary}
+                  size={INPUT_HEIGHT / 2}
+                  style={styles.icon}
+                />
+              )} */}
             </>
           )}
         />
-
-        {secureTextEntry && (
-          <FeatherIcon
-            name={eyeVisible ? 'eye-off' : 'eye'}
-            color={colors.black}
-            size={INPUT_HEIGHT / 2}
-            style={styles.password}
-            onPress={() => setEyeVisible(prevState => !prevState)}
-          />
-        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  input: {
+  linearGradient: {
     borderRadius: 20,
-    // borderColor: colors.black,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    marginTop: 4,
     height: INPUT_HEIGHT,
+    marginTop: 4,
   },
-  password: {
+  input: {
+    paddingHorizontal: 10,
+    height: INPUT_HEIGHT,
+    backgroundColor: colors.gray2,
+    borderWidth: 1,
+    borderRadius: 20,
+    marginTop: 4,
+  },
+  icon: {
     position: 'absolute',
     top: INPUT_HEIGHT / 3,
     right: INPUT_HEIGHT / 3,
