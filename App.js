@@ -9,12 +9,12 @@ import BottomTabNavigation from './app/navigation/bottomTab/BottomTabNavigation'
 
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {useReactQueryGlobalState} from './app/api';
 import {View, Text} from 'react-native';
 
 const App = () => {
+  const [loggedIn1] = useReactQueryGlobalState('LoggedIn', false);
   const isDarkMode = useColorScheme() === 'dark';
-  const loggedIn = false;
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -25,21 +25,19 @@ const App = () => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          {loggedIn ? (
-            <>
-              <BottomTabNavigation />
-            </>
-          ) : (
-            <>
-              <AuthStackNavigation />
-            </>
-          )}
-        </NavigationContainer>
-      </QueryClientProvider>
+      <NavigationContainer>
+        {loggedIn1 ? <BottomTabNavigation /> : <AuthStackNavigation />}
+      </NavigationContainer>
     </SafeAreaView>
   );
 };
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+};
+
+export default AppWrapper;

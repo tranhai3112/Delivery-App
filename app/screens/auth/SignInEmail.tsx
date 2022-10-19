@@ -1,33 +1,48 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, Pressable} from 'react-native';
-import {style as fontStyles} from '../../themes/fonts';
+import {Text} from 'react-native';
 import {
   CustomTextInput,
   CustomButton,
   Divider,
   ExternalLink,
 } from '../../components/common';
+import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import colors from '../../themes/colors';
+import AuthWrapper from './AuthWrapper';
+import {SignInEmailScreenNavigationProp} from '../../navigation/stack/auth/AuthStackTypes';
+import {EMAIL_REGEX} from './common';
+import {useReactQueryGlobalState} from '../../api';
 
-const WINDOW_WIDTH = Dimensions.get('window').width;
 const BUTTON_MARGIN_TOP = 50;
-const INPUT_MARGIN_BOTTOM = 12;
-const EMAIL_REGEX =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const INPUT_MARGIN_BOTTOM = 6;
 
-export const SignUpEmail = () => {
+export const SignInEmail = () => {
+  const [loggedIn1, setLoggedIn1] = useReactQueryGlobalState('LoggedIn', false);
   const {
     control,
     handleSubmit,
     formState: {errors},
+    reset,
   } = useForm();
   const onSubmit = values => {
     console.log(values);
+    setLoggedIn1(true);
+    reset();
   };
+  console.log(loggedIn1, 'sign screen');
+
+  const navigation = useNavigation<SignInEmailScreenNavigationProp>();
+  const navigateToForgotPassword = React.useCallback(() => {
+    reset();
+    navigation.navigate('forgotPassword_screen1', {type: 'email'});
+  }, []);
   return (
-    <View>
-      <Text style={[fontStyles.h2, styles.headerTitle]}>Welcome Back.</Text>
+    <AuthWrapper
+      title="Welcome Back."
+      outerText="Don't have an account?"
+      innerText="Register now"
+      navigateTo="signup_email">
       <CustomTextInput
         label="Email"
         keyboardType="email-address"
@@ -53,7 +68,9 @@ export const SignUpEmail = () => {
           },
         }}
       />
-      <Text style={[colors.gray, {alignSelf: 'flex-end'}]}>
+      <Text
+        style={[colors.gray, {alignSelf: 'flex-end'}] as any}
+        onPress={navigateToForgotPassword}>
         Forgot password?
       </Text>
       <CustomButton
@@ -63,13 +80,6 @@ export const SignUpEmail = () => {
       />
       <Divider verticalSpace={30} />
       <ExternalLink />
-    </View>
+    </AuthWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  headerTitle: {
-    width: WINDOW_WIDTH / 2,
-    marginBottom: 16,
-  },
-});
