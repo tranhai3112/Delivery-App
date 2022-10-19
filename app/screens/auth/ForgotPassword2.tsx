@@ -45,19 +45,13 @@ export const ForgotPassword2 = () => {
     navigation.navigate('forgotPassword_screen3');
   };
   React.useEffect(() => {
-    // forward
-    console.log(dirtyFields);
+    const {number1, number2, number3, number4} = dirtyFields;
+    if (number1) n2Ref.current?.focus();
+    if (number2) n3Ref.current?.focus();
+    if (number3) n4Ref.current?.focus();
 
-    if (n1) n2Ref.current?.focus();
-    if (n2) n3Ref.current?.focus();
-    if (n3) n4Ref.current?.focus();
-    if (n1 && n2 && n3 && n4) console.log('');
-    // onSubmit({number1: n1, number2: n2, number3: n3, number4: n4});
-    // if (!n1) n1Ref.current?.focus();
-    // else if (!n2) n1Ref.current?.focus();
-    // else if (!n3) n2Ref.current?.focus();
-    // else if (!n4) console.log('');
-    // backward
+    if (number1 && number2 && number3 && number4)
+      onSubmit({number1: n1, number2: n2, number3: n3, number4: n4});
   }, [n1, n2, n3, n4]);
   const ReSendCode = (): void => {};
   return (

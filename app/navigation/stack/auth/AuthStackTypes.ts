@@ -2,6 +2,7 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import type {RouteProp} from '@react-navigation/native';
 // navigator params check
 export type AuthStackNavigatorParamList = {
+  onboard: undefined;
   signin_email: undefined;
   signup_email: undefined;
   forgotPassword_screen1: {

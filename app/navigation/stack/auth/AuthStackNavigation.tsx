@@ -6,6 +6,7 @@ import {
   ForgotPassword1,
   ForgotPassword2,
   ForgotPassword3,
+  OnBoardScreen,
 } from '../../../screens/auth';
 import {AuthStackNavigatorParamList} from './AuthStackTypes';
 import colors from '../../../themes/colors';
@@ -28,6 +29,7 @@ const AuthStackNavigation = () => {
           flex: 1,
         },
       }}>
+      <AuthStack.Screen name="onboard" component={OnBoardScreen} />
       <AuthStack.Screen name="signin_email" component={SignInEmail} />
       <AuthStack.Screen name="signup_email" component={SignUpEmail} />
       <AuthStack.Screen

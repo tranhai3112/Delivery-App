@@ -12,11 +12,13 @@ import colors from '../../themes/colors';
 import AuthWrapper from './AuthWrapper';
 import {SignInEmailScreenNavigationProp} from '../../navigation/stack/auth/AuthStackTypes';
 import {EMAIL_REGEX} from './common';
+import {useReactQueryGlobalState} from '../../api';
 
 const BUTTON_MARGIN_TOP = 50;
 const INPUT_MARGIN_BOTTOM = 6;
 
 export const SignInEmail = () => {
+  const [loggedIn1, setLoggedIn1] = useReactQueryGlobalState('LoggedIn', false);
   const {
     control,
     handleSubmit,
@@ -25,8 +27,11 @@ export const SignInEmail = () => {
   } = useForm();
   const onSubmit = values => {
     console.log(values);
+    setLoggedIn1(true);
     reset();
   };
+  console.log(loggedIn1, 'sign screen');
+
   const navigation = useNavigation<SignInEmailScreenNavigationProp>();
   const navigateToForgotPassword = React.useCallback(() => {
     reset();

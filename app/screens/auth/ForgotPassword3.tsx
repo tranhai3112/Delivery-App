@@ -13,11 +13,15 @@ export const ForgotPassword3 = () => {
     ForgotPassword3FormData | any
   >();
   const pwd = watch('Password');
+  const onSubmit = (values: ForgotPassword3FormData): void => {
+    console.log(values);
+  };
   return (
     <AuthWrapper title="Reset Password.">
       <CustomTextInput
         name="Password"
         label="Password"
+        containerStyle={{marginBottom: 10}}
         control={control}
         secureTextEntry
         rules={{
@@ -32,6 +36,7 @@ export const ForgotPassword3 = () => {
         name="ConfirmPassword"
         label="Confirm password"
         control={control}
+        containerStyle={{marginBottom: 40}}
         secureTextEntry
         rules={{
           required: 'This field is required',
@@ -43,6 +48,7 @@ export const ForgotPassword3 = () => {
             value === pwd || 'password do not match',
         }}
       />
+      <CustomButton text="Done" onPress={handleSubmit(onSubmit)} />
     </AuthWrapper>
   );
 };
