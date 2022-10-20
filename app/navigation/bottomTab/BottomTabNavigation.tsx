@@ -10,6 +10,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {Text, StyleSheet} from 'react-native';
 import colors from '../../themes/colors';
 import CustomCartTabBarButton from './CustomCartTabBarButton';
+// stacks
+import HomeStackNavigation from '../stack/home/HomeStackNavigation';
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 const BOTTOM_TAB_BAR_HEIGHT = 66;
@@ -24,10 +26,11 @@ const BottomTabNavigation = () => {
           borderRadius: 15,
           height: BOTTOM_TAB_BAR_HEIGHT,
         },
+        tabBarHideOnKeyboard: true,
       }}>
       <BottomTab.Screen
-        name="home"
-        component={() => <></>}
+        name="root_home"
+        component={HomeStackNavigation}
         options={{
           tabBarIcon: ({focused, color}) => (
             <FeatherIcon
