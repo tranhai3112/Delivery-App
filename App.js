@@ -8,15 +8,13 @@ import AuthStackNavigation from './app/navigation/stack/auth/AuthStackNavigation
 import BottomTabNavigation from './app/navigation/bottomTab/BottomTabNavigation';
 
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useReactQueryGlobalState} from './app/api';
-import {View, Text} from 'react-native';
-
+import colors from './app/themes/colors';
 const App = () => {
-  const [loggedIn1] = useReactQueryGlobalState('LoggedIn', false);
+  const [loggedIn] = useReactQueryGlobalState('LoggedIn', false);
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? colors.darkGray : colors.white,
   };
 
   return (
@@ -26,7 +24,7 @@ const App = () => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <NavigationContainer>
-        {loggedIn1 ? <BottomTabNavigation /> : <AuthStackNavigation />}
+        {loggedIn ? <BottomTabNavigation /> : <AuthStackNavigation />}
       </NavigationContainer>
     </SafeAreaView>
   );

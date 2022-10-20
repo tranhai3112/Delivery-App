@@ -24,21 +24,40 @@ interface DataItems {
     title: string;
     subTitle: string;
     id: string;
+    imagePath: any;
   };
   onPress: (id: string) => void;
 }
 
+const DATA = [
+  {
+    id: '1',
+    title: 'Order Quickly',
+    subTitle: 'Order from the best restaurants with easy, on-demand delivery',
+    imagePath: require('../../assets/images/Order.png'),
+  },
+  {
+    id: '2',
+    title: 'Free Delivery Offers',
+    subTitle: 'Free delivery for new customers and other payment methods',
+    imagePath: require('../../assets/images/Delivery.png'),
+  },
+  {
+    id: '3',
+    title: 'Friendly And Polite',
+    subTitle:
+      "Easily find your type of food craving and you'll get delivery in wide range",
+    imagePath: require('../../assets/images/Friendly.png'),
+  },
+];
+
 const OnBoardScreenItem: React.FC<DataItems> = ({
-  item: {title, subTitle, id},
+  item: {title, subTitle, id, imagePath},
   onPress,
 }) => {
   return (
     <View style={styles.itemContainer}>
-      <Image
-        source={require('../../assets/images/Apple_logo_black.png')}
-        style={[styles.image]}
-        resizeMode="contain"
-      />
+      <Image source={imagePath} style={[styles.image]} resizeMode="contain" />
       <View style={{flex: 1}}>
         <Text
           style={[
@@ -62,9 +81,27 @@ const OnBoardScreenItem: React.FC<DataItems> = ({
           {subTitle}
         </Text>
         <View style={styles.processContainer}>
-          <View style={styles.process}></View>
-          <View style={styles.process}></View>
-          <View style={styles.process}></View>
+          <View
+            style={[
+              styles.process,
+              {
+                backgroundColor: id === '1' ? colors.primary : colors.darkGray,
+              },
+            ]}></View>
+          <View
+            style={[
+              styles.process,
+              {
+                backgroundColor: id === '2' ? colors.primary : colors.darkGray,
+              },
+            ]}></View>
+          <View
+            style={[
+              styles.process,
+              {
+                backgroundColor: id === '3' ? colors.primary : colors.darkGray,
+              },
+            ]}></View>
         </View>
         <View style={styles.navigate}>
           <Text style={{color: colors.gray2, left: PADDING + 5}}>Skip</Text>
@@ -76,25 +113,6 @@ const OnBoardScreenItem: React.FC<DataItems> = ({
     </View>
   );
 };
-
-const DATA = [
-  {
-    id: '1',
-    title: 'Order Quickly',
-    subTitle: 'Order from the best restaurants with easy, on-demand delivery',
-  },
-  {
-    id: '2',
-    title: 'Free Delivery Offers',
-    subTitle: 'Free delivery for new customers and other payment methods',
-  },
-  {
-    id: '3',
-    title: 'Friendly And Polite',
-    subTitle:
-      "Easily find your type of food craving and you'll get delivery in wide range",
-  },
-];
 
 export const OnBoardScreen = () => {
   const navigation = useNavigation<SignInEmailScreenNavigationProp>();
@@ -128,6 +146,7 @@ export const OnBoardScreen = () => {
         }}
         horizontal
         pagingEnabled
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
@@ -171,7 +190,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 10,
     borderRadius: 4,
-    backgroundColor: colors.primary,
     marginHorizontal: 5,
   },
   container: {

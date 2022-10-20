@@ -15,6 +15,7 @@ import {Controller} from 'react-hook-form';
 interface ICustomButton extends PressableProps {
   text?: string;
   containerStyle?: StyleProp<FlexStyle>;
+  rippleEffect?: boolean;
 }
 
 const PRESSABLE_HEGHT = 50;
@@ -23,12 +24,13 @@ export const CustomButton: React.FC<ICustomButton> = ({
   text,
   containerStyle,
   onPress,
+  rippleEffect = true,
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
       <Pressable
         style={styles.pressable}
-        android_ripple={{color: colors.gray}}
+        android_ripple={{color: rippleEffect ? colors.gray : colors.primary}}
         onPress={onPress}>
         <Text style={[styles.text, fontStyles.medium_bold] as any}>{text}</Text>
       </Pressable>

@@ -1,9 +1,9 @@
 export type HomeStackNavigatorParamList = {
-  home: undefined;
+  root_home: undefined;
 };
 
 export type BottomTabNavigatorParamList = {
-  home: HomeStackNavigatorParamList;
+  root_home: HomeStackNavigatorParamList;
   favorite: undefined;
   cart: undefined;
   notifycation: undefined;

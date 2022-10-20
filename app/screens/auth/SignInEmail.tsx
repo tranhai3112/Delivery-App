@@ -28,7 +28,6 @@ export const SignInEmail = () => {
   const onSubmit = values => {
     console.log(values);
     setLoggedIn1(true);
-    reset();
   };
   console.log(loggedIn1, 'sign screen');
 
@@ -77,6 +76,7 @@ export const SignInEmail = () => {
         containerStyle={{marginTop: BUTTON_MARGIN_TOP}}
         onPress={handleSubmit(onSubmit)}
         text="Sign in"
+        rippleEffect={false}
       />
       <Divider verticalSpace={30} />
       <ExternalLink />
