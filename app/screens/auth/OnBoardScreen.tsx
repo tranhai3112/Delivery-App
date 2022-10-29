@@ -14,6 +14,17 @@ import AntdIcon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import {SignInEmailScreenNavigationProp} from '../../navigation/stack/auth/AuthStackTypes';
 
+import Animated, {
+  interpolate,
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedScrollHandler,
+} from 'react-native-reanimated';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler';
+
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const PADDING = 20;
 const IMAGE_SIZE = 200;
@@ -27,6 +38,7 @@ interface DataItems {
     imagePath: any;
   };
   onPress: (id: string) => void;
+  translateX: Animated.SharedValue<number>;
 }
 
 const DATA = [
@@ -54,9 +66,13 @@ const DATA = [
 const OnBoardScreenItem: React.FC<DataItems> = ({
   item: {title, subTitle, id, imagePath},
   onPress,
+  translateX,
 }) => {
+  const rStyle = useAnimatedStyle(() => {
+    return {};
+  }, []);
   return (
-    <View style={styles.itemContainer}>
+    <Animated.View style={styles.itemContainer}>
       <Image source={imagePath} style={[styles.image]} resizeMode="contain" />
       <View style={{flex: 1}}>
         <Text
@@ -110,13 +126,14 @@ const OnBoardScreenItem: React.FC<DataItems> = ({
           </Pressable>
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
 export const OnBoardScreen = () => {
   const navigation = useNavigation<SignInEmailScreenNavigationProp>();
-  const flatListRef = React.useRef<FlatList>(null);
+  const translateX = useSharedValue<number>(0);
+  const flatListRef = React.useRef<any>(null);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       contentStyle: {
@@ -125,6 +142,9 @@ export const OnBoardScreen = () => {
       },
     });
   }, []);
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    translateX.value = event.contentOffset.x;
+  });
   const onPressNext = (id: string): void => {
     if (id === '3') {
       navigation.navigate('signin_email');
@@ -137,16 +157,24 @@ export const OnBoardScreen = () => {
   };
   return (
     <View style={{flex: 1}}>
-      <FlatList
+      <Animated.FlatList
         ref={flatListRef}
         data={DATA}
         keyExtractor={(item, index) => item.id}
         renderItem={({item}) => {
-          return <OnBoardScreenItem item={item} onPress={onPressNext} />;
+          return (
+            <OnBoardScreenItem
+              item={item}
+              onPress={onPressNext}
+              translateX={translateX}
+            />
+          );
         }}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
       />
     </View>
   );
